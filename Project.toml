@@ -1,0 +1,13 @@
+name = "ChristensenSet"
+uuid = "1fd1c3fc-0bb4-11e9-20cb-91458b937d33"
+authors = ["Tomáš Kalvoda <tomas.kalvoda@fit.cvut.cz>"]
+version = "0.1.0"
+
+[deps]
+Distributed = "8ba89e20-285c-5b6f-9357-94700520ee1b"
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+DocumenterTools = "35a29f4d-8980-5a13-9543-d66fff28ecb8"
+FileIO = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
+Images = "916415d5-f1e6-5110-898d-aaa5f9f070e0"
+PolynomialRoots = "3a141323-8675-5d76-9d11-e1df1406c778"
+ProgressMeter = "92933f4c-e287-5a05-a399-4b506db050ca"
