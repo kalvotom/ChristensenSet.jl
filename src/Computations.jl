@@ -43,7 +43,7 @@ function compute_roots!(poly_iter::PolynomialIterator{S}, filename::AbstractStri
     end
   end
 
-  println("$counter roots found.")
+  @info "$counter roots found."
 end
 
 function compute_roots_in_parallel!(poly_iter::PolynomialIterator{S}, filename::AbstractString, workers_ids) where {S <: Number}
@@ -53,6 +53,8 @@ function compute_roots_in_parallel!(poly_iter::PolynomialIterator{S}, filename::
   w = 1
 
   io = open(filename, "w")
+
+  @info "Computing..."
 
   for poly in poly_iter
     # run jobs
@@ -74,6 +76,8 @@ function compute_roots_in_parallel!(poly_iter::PolynomialIterator{S}, filename::
     end
   end
 
+  @info "Saving last results..."
+
   for k in 1:(w-1)
     for z in roots(fetch(results[k]))
       if !isnan(z) && abs(z) > eps(S) # PolynomialRoots pad roots array with NaNs,
@@ -85,5 +89,5 @@ function compute_roots_in_parallel!(poly_iter::PolynomialIterator{S}, filename::
 
   close(io)
 
-  println("$counter roots found.")
+  @info "$counter roots found."
 end
