@@ -12,7 +12,7 @@ module ChristensenSet
 
 using PolynomialRoots
 using Images, FileIO
-using Distributed
+using Distributed, ProgressMeter
 
 export PolynomialIterator
 export RootsImage
