@@ -46,32 +46,39 @@ function compute_roots!(poly_iter::PolynomialIterator{S}, filename::AbstractStri
   println("$counter roots found.")
 end
 
-function compute_roots_in_parallel!(poly_iter::PolynomialIterator{S}, filename::AbstractString, batch_size=4) where {S <: Number}
-  iterator_state = iterate(poly_iter)
+function compute_roots_in_parallel!(poly_iter::PolynomialIterator{S}, filename::AbstractString, workers_ids) where {S <: Number}
+  batch_size = length(workers_ids)
   results = fill(Future(), batch_size)
   counter = 0
+  w = 1
 
   io = open(filename, "w")
 
-  while iterator_state != nothing
+  for poly in poly_iter
     # run jobs
-    for k in 1:batch_size
-      results[k] = @spawn roots(iterator_state[1])
-      iterator_state = iterate(poly_iter, iterator_state[2])
-
-      if iterator_state == nothing
-        break
-        batch_size = k
-      end
-    end
+    results[w] = @spawnat workers_ids[w] roots(poly)
 
     # write results
-    for k in 1:batch_size
-      for z in roots(fetch(results[k]))
-        if !isnan(z) && abs(z) > eps(S) # PolynomialRoots pad roots array with NaNs,
-          write(io, z)                  # ignore zero as a root.
-          counter += 1
+    if w == batch_size
+      for k in 1:batch_size
+        for z in roots(fetch(results[k]))
+          if !isnan(z) && abs(z) > eps(S) # PolynomialRoots pad roots array with NaNs,
+            write(io, z)                  # ignore zero as a root.
+            counter += 1
+          end
         end
+      end
+      w = 1
+    else
+      w += 1
+    end
+  end
+
+  for k in 1:(w-1)
+    for z in roots(fetch(results[k]))
+      if !isnan(z) && abs(z) > eps(S) # PolynomialRoots pad roots array with NaNs,
+        write(io, z)                  # ignore zero as a root.
+        counter += 1
       end
     end
   end
