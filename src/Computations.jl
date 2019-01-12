@@ -49,6 +49,7 @@ end
 function compute_roots_in_parallel!(poly_iter::PolynomialIterator{S}, filename::AbstractString, batch_size=4) where {S <: Number}
   iterator_state = iterate(poly_iter)
   results = fill(Future(), batch_size)
+  counter = 0
 
   io = open(filename, "w")
 
