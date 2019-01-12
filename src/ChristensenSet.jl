@@ -16,7 +16,7 @@ using Distributed
 
 export PolynomialIterator
 export RootsImage
-export compute_roots!
+export compute_roots!, compute_roots_in_parallel!
 export save_image, load_image
 
 include("PolynomialIterator.jl")

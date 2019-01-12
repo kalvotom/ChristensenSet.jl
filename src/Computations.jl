@@ -46,7 +46,7 @@ function compute_roots!(poly_iter::PolynomialIterator{S}, filename::AbstractStri
   println("$counter roots found.")
 end
 
-function copute_roots_in_parallel!(poly_iter::PolynomialIterator{S}, filename::AbstractString, batch_size=4) where {S <: Number}
+function compute_roots_in_parallel!(poly_iter::PolynomialIterator{S}, filename::AbstractString, batch_size=4) where {S <: Number}
   iterator_state = iterate(poly_iter)
   results = fill(nothing, batch_size)
 
