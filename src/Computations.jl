@@ -55,7 +55,7 @@ function compute_roots_in_parallel!(poly_iter::PolynomialIterator{S}, filename::
 
   while iterator_state != nothing
     # run jobs
-    @sync for k in 1:batch_size
+    for k in 1:batch_size
       results[k] = @spawn roots(iterator_state[1])
       iterator_state = iterate(poly_iter, iterator_state[2])
 
