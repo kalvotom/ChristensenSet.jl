@@ -11,12 +11,15 @@ it occurs too many times and is not interesting.
 This function relies on `roots` from the `PolynomialRoots` package.
 """
 function compute_roots!(poly_iter::PolynomialIterator{S}, image::RootsImage{T}) where {S <: Number, T <: Real} 
+  progress = Progress(length(poly_iter), 10)
+
   for poly in poly_iter
     for z in roots(poly)
       if !isnan(z) && abs(z) > eps(T) # PolynomialRoots pad roots array with NaNs,
         add_root!(image, z)           # ignore zero as a root.
       end
     end
+    next!(progress)
   end
 
   println("$(Int(sum(img.data))) roots found.")
@@ -31,6 +34,7 @@ This function relies on `roots` from the `PolynomialRoots` package.
 """
 function compute_roots!(poly_iter::PolynomialIterator{S}, filename::AbstractString) where {S <: Number}
   counter = 0
+  progress = Progress(length(poly_iter), 10)
 
   open(filename, "w") do io
     for poly in poly_iter
@@ -40,6 +44,7 @@ function compute_roots!(poly_iter::PolynomialIterator{S}, filename::AbstractStri
           counter += 1
         end
       end
+      next!(progress)
     end
   end
 
