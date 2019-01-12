@@ -46,19 +46,21 @@ function compute_roots!(poly_iter::PolynomialIterator{S}, filename::AbstractStri
   @info "$counter roots found."
 end
 
-function compute_roots_in_parallel!(poly_iter::PolynomialIterator{S}, filename::AbstractString, workers_ids) where {S <: Number}
-  batch_size = length(workers_ids)
+function compute_roots_in_parallel!(poly_iter::PolynomialIterator{S}, filename::AbstractString, batch_size) where {S <: Number}
   results = fill(Future(), batch_size)
   counter = 0
   w = 1
+  first_run = true
 
   io = open(filename, "w")
 
   @info "Computing..."
 
   for poly in poly_iter
-    # run jobs
-    results[w] = @spawnat workers_ids[w] roots(poly)
+    # spin up workers
+    if first_run
+      results[w] = @spawn roots(poly)
+    end
 
     # write results
     if w == batch_size
@@ -69,7 +71,9 @@ function compute_roots_in_parallel!(poly_iter::PolynomialIterator{S}, filename::
             counter += 1
           end
         end
+        results[k] = @spawn roots(poly)
       end
+      first_run = false
       w = 1
     else
       w += 1
