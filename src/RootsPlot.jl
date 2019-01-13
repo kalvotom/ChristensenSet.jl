@@ -37,7 +37,7 @@ function add_root!(img::RootsImage{T}, z::Complex{T}) where {T <: Real}
   img.data[x, y] += T(1)
 end
 
-function save_image(img::RootsImage{T}, filename::AbstractString; mode=:sharp) where {T <: Real}
+function save_image(img::RootsImage{T}, filename::AbstractString; mode=:sharp, latex_filename=nothing) where {T <: Real}
   if mode == :sharp
     output = (x -> min(1, x)).(img.data)
   elseif mode == :log_cutoff
@@ -46,13 +46,33 @@ function save_image(img::RootsImage{T}, filename::AbstractString; mode=:sharp) w
     output = output / maximum(output)
   end
   Images.save(filename, colorview(Gray, output))
+
+  if latex_filename != nothing
+    open(latex_filename) do io
+      write(io, "\\documentclass{standalone}\n")
+      write(io, "\\usepackage[T1]{fontenc}\n")
+      write(io, "\\usepackage[utf8]{inputenc}\n")
+      write(io, "\\usepackage{pgfplots}\n")
+      write(io, "\\usepackage{lmodern}\n")
+      write(io, "\\begin{document}\n")
+      write(io, "\\begin{tikzpicture}\n")
+      write(io, "  \\begin{axis}[axis on top]\n")
+      write(io, "     \\addplot graphics [xmin=$(img.remin), xmax=$(img.remax), ymin=$(img.immin), ymax=$(img.immax)] {$filename}")
+      write(io, "  \\end{axis}\n")
+      write(io, "\\end{tikzpicture}\n")
+      write(io, "\\end{document}\n")
+    end
+  end
 end
 
 function load_image(img::RootsImage{T}, filename::AbstractString) where {T <: Real}
+  progress = Progress(div(filesize(filename), sizeof(T)), 10)
+
   open(filename) do io
     while !eof(io)
       z = read(io, Complex{T})
       add_root!(img, z)
+      next!(progress)
     end
   end
 end
