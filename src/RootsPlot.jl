@@ -38,6 +38,8 @@ function add_root!(img::RootsImage{T}, z::Complex{T}) where {T <: Real}
 end
 
 function save_image(img::RootsImage{T}, filename::AbstractString; mode=:sharp, latex_filename=nothing) where {T <: Real}
+  @info "Saving the image..."
+
   if mode == :sharp
     output = (x -> min(1, x)).(img.data)
   elseif mode == :log_cutoff
@@ -48,14 +50,17 @@ function save_image(img::RootsImage{T}, filename::AbstractString; mode=:sharp, l
   Images.save(filename, colorview(Gray, output))
 
   if latex_filename != nothing
+    @info "Constructing the LaTeX file..."
     write_latex(img, filename, latex_filename)
   end
 end
 
 function load_image(img::RootsImage{T}, filename::AbstractString) where {T <: Real}
-  progress = Progress(div(filesize(filename), sizeof(Complex{T})), 10)
+  progress = Progress(div(filesize(filename), sizeof(Complex{T})) + 1, 10)
 
-  open(filename) do io
+  @info "Sifting through data..."
+
+  open(filename, "w") do io
     while !eof(io)
       z = read(io, Complex{T})
       add_root!(img, z)
