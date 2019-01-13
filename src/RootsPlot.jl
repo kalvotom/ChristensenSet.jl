@@ -48,25 +48,12 @@ function save_image(img::RootsImage{T}, filename::AbstractString; mode=:sharp, l
   Images.save(filename, colorview(Gray, output))
 
   if latex_filename != nothing
-    open(latex_filename) do io
-      write(io, "\\documentclass{standalone}\n")
-      write(io, "\\usepackage[T1]{fontenc}\n")
-      write(io, "\\usepackage[utf8]{inputenc}\n")
-      write(io, "\\usepackage{pgfplots}\n")
-      write(io, "\\usepackage{lmodern}\n")
-      write(io, "\\begin{document}\n")
-      write(io, "\\begin{tikzpicture}\n")
-      write(io, "  \\begin{axis}[axis on top]\n")
-      write(io, "     \\addplot graphics [xmin=$(img.remin), xmax=$(img.remax), ymin=$(img.immin), ymax=$(img.immax)] {$filename}")
-      write(io, "  \\end{axis}\n")
-      write(io, "\\end{tikzpicture}\n")
-      write(io, "\\end{document}\n")
-    end
+    write_latex(img, filename, latex_filename)
   end
 end
 
 function load_image(img::RootsImage{T}, filename::AbstractString) where {T <: Real}
-  progress = Progress(div(filesize(filename), sizeof(T)), 10)
+  progress = Progress(div(filesize(filename), sizeof(Complex{T})), 10)
 
   open(filename) do io
     while !eof(io)
@@ -74,5 +61,22 @@ function load_image(img::RootsImage{T}, filename::AbstractString) where {T <: Re
       add_root!(img, z)
       next!(progress)
     end
+  end
+end
+
+function write_latex(img::RootsImage{T}, filename::AbstractString, latex_filename::AbstractString) where {T <: Real}
+  open(latex_filename) do io
+    write(io, "\\documentclass{standalone}\n")
+    write(io, "\\usepackage[T1]{fontenc}\n")
+    write(io, "\\usepackage[utf8]{inputenc}\n")
+    write(io, "\\usepackage{pgfplots}\n")
+    write(io, "\\usepackage{lmodern}\n")
+    write(io, "\\begin{document}\n")
+    write(io, "\\begin{tikzpicture}\n")
+    write(io, "  \\begin{axis}[axis on top]\n")
+    write(io, "     \\addplot graphics [xmin=$(img.remin), xmax=$(img.remax), ymin=$(img.immin), ymax=$(img.immax)] {$filename}\n")
+    write(io, "  \\end{axis}\n")
+    write(io, "\\end{tikzpicture}\n")
+    write(io, "\\end{document}\n")
   end
 end
