@@ -60,7 +60,7 @@ function load_image(img::RootsImage{T}, filename::AbstractString) where {T <: Re
 
   @info "Sifting through data..."
 
-  open(filename, "w") do io
+  open(filename) do io
     while !eof(io)
       z = read(io, Complex{T})
       add_root!(img, z)
@@ -70,7 +70,7 @@ function load_image(img::RootsImage{T}, filename::AbstractString) where {T <: Re
 end
 
 function write_latex(img::RootsImage{T}, filename::AbstractString, latex_filename::AbstractString) where {T <: Real}
-  open(latex_filename) do io
+  open(latex_filename, "w") do io
     write(io, "\\documentclass{standalone}\n")
     write(io, "\\usepackage[T1]{fontenc}\n")
     write(io, "\\usepackage[utf8]{inputenc}\n")
