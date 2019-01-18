@@ -26,7 +26,7 @@ end
 #
 
 function Base.iterate(iter::PolynomialIterator{T}) where {T <: Number}
-  return (fill(iter.coefficients[1], iter.degree + 1), fill(1, iter.degree + 1))
+  return ([iter.coefficients[1]], [1])
 end
 
 function Base.iterate(iter::PolynomialIterator{T}, state::Array{Int, 1}) where {T <: Number}
