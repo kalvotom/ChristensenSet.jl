@@ -3,6 +3,9 @@
 # Visualization and related functions
 #
 
+"""
+Essentially a two dimensional histogram. 
+"""
 struct RootsImage{T <: Real}
   remin::T
   remax::T
@@ -37,6 +40,18 @@ function add_root!(img::RootsImage{T}, z::Complex{T}) where {T <: Real}
   img.data[x, y] += T(1)
 end
 
+function plot(img::RootsImage{T}; mode=:sharp) where {T <: Real}
+  if mode == :sharp
+    output = (x -> min(1, x)).(img.data)
+  elseif mode == :log_cutoff
+    mean = sum(img.data) / length(img.data)
+    output = (x -> log(1 + min(1.2 * mean, x))).(img.data)
+    output = output / maximum(output)
+  end
+  
+  return colorview(Gray, output)
+end
+
 function save_image(img::RootsImage{T}, filename::AbstractString; mode=:sharp, latex_filename=nothing) where {T <: Real}
   @info "Saving the image..."
 
@@ -69,6 +84,22 @@ function load_image(img::RootsImage{T}, filename::AbstractString) where {T <: Re
   end
 end
 
+function load_images(imgs::Array{RootsImage{T}}, filename::AbstractString) where {T <: Real}
+  progress = Progress(div(filesize(filename), sizeof(Complex{T})) + 1, 10)
+
+  @info "Sifting through data..."
+
+  open(filename) do io
+    while !eof(io)
+      z = read(io, Complex{T})
+      for img in imgs
+        add_root!(img, z)
+      end
+      next!(progress)
+    end
+  end
+end
+
 function write_latex(img::RootsImage{T}, filename::AbstractString, latex_filename::AbstractString) where {T <: Real}
   open(latex_filename, "w") do io
     write(io, "\\documentclass{standalone}\n")
@@ -78,8 +109,8 @@ function write_latex(img::RootsImage{T}, filename::AbstractString, latex_filenam
     write(io, "\\usepackage{lmodern}\n")
     write(io, "\\begin{document}\n")
     write(io, "\\begin{tikzpicture}\n")
-    write(io, "  \\begin{axis}[axis on top]\n")
-    write(io, "     \\addplot graphics [xmin=$(img.remin), xmax=$(img.remax), ymin=$(img.immin), ymax=$(img.immax)] {$filename}\n")
+    write(io, "  \\begin{axis}[enlarge limits=false, axis on top, xlabel={\$\\Re\$}, ylabel={\$\\Im\$}]\n")
+    write(io, "     \\addplot graphics [xmin=$(img.remin), xmax=$(img.remax), ymin=$(img.immin), ymax=$(img.immax)] {$filename};\n")
     write(io, "  \\end{axis}\n")
     write(io, "\\end{tikzpicture}\n")
     write(io, "\\end{document}\n")
