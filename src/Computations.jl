@@ -22,7 +22,7 @@ function compute_roots!(poly_iter::PolynomialIterator{S}, image::RootsImage{T}) 
     next!(progress)
   end
 
-  println("$(Int(sum(img.data))) roots found.")
+  @info "$(Int(sum(image.data))) roots found."
 end
 
 """
