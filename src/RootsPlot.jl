@@ -49,7 +49,7 @@ function plot(img::RootsImage{T}; mode=:sharp) where {T <: Real}
     output = output / maximum(output)
   end
   
-  return colorview(Gray, transpose(output))
+  return colorview(Gray, transpose(output)[end:-1:1,1:end])
 end
 
 function save_image(img::RootsImage{T}, filename::AbstractString; mode=:sharp, latex_filename=nothing) where {T <: Real}
@@ -62,7 +62,7 @@ function save_image(img::RootsImage{T}, filename::AbstractString; mode=:sharp, l
     output = (x -> log(1 + min(1.2 * mean, x))).(img.data)
     output = output / maximum(output)
   end
-  Images.save(filename, colorview(Gray, output))
+  Images.save(filename, colorview(Gray, transpose(output)[end:-1:1,1:end]))
 
   if latex_filename != nothing
     @info "Constructing the LaTeX file..."
