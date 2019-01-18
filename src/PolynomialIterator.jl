@@ -42,7 +42,8 @@ function Base.iterate(iter::PolynomialIterator{T}, state::Array{Int, 1}) where {
   if length(state) == iter.degree + 1
     return nothing
   else
-    return (vcat([iter.coefficients[j] for j in state], [iter.coefficients[1]]), vcat(state, [1]))
+    append!(state, 1)
+    return ([iter.coefficients[j] for j in state], state)
   end
 end
 
