@@ -49,7 +49,7 @@ function plot(img::RootsImage{T}; mode=:sharp) where {T <: Real}
     output = output / maximum(output)
   end
   
-  return colorview(Gray, output)
+  return colorview(Gray, transpose(output))
 end
 
 function save_image(img::RootsImage{T}, filename::AbstractString; mode=:sharp, latex_filename=nothing) where {T <: Real}
