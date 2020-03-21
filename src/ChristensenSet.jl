@@ -2,7 +2,7 @@
 #
 # Christensen set Julia package
 #
-# Tomáš Kalvoda, FIT CTU in Prague, 2018
+# Tomáš Kalvoda, FIT CTU in Prague, 2018--2020
 #
 
 """

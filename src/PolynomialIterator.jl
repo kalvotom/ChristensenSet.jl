@@ -4,12 +4,15 @@
 #
 
 """
+
+    PolynomialIterator(coefficients, degree)
+
 Iterate over all polynomials with coefficients provided by array `coefficients`
 and maximal degree `degree`.
 
-Polynomials are represented by array of their coefficients from the lowest to
-the highest order (as in `PolynomialsRoots` package). For example `z^2 + 2z + 3`
-corresponds to `[3, 2, 1]`.
+Polynomials are represented by arrays of their coefficients from the lowest to
+the highest order (as in `PolynomialsRoots` package).
+For example ``z^2 + 2z + 3`` corresponds to `[3, 2, 1]`.
 """
 struct PolynomialIterator{T <: Number}
   coefficients::Array{T, 1}   # array of coefficients
@@ -23,6 +26,8 @@ end
 
 #
 # Iterator interface
+#
+# see https://docs.julialang.org/en/v1/manual/interfaces/
 #
 
 function Base.iterate(iter::PolynomialIterator{T}) where {T <: Number}

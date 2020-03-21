@@ -55,51 +55,5 @@ end
 TODO
 """
 function compute_roots_in_parallel!(poly_iter::PolynomialIterator{S}, filename::AbstractString, batch_size) where {S <: Number}
-  results = fill(Future(), batch_size)
-  counter = 0
-  w = 1
-  first_run = true
-
-  io = open(filename, "w")
-
-  @info "Computing..."
-
-  for poly in poly_iter
-    # spin up workers
-    if first_run
-      results[w] = @spawn roots(poly)
-    end
-
-    # write results
-    if w == batch_size
-      for k in 1:batch_size
-        for z in roots(fetch(results[k]))
-          if !isnan(z) && abs(z) > eps(S) # PolynomialRoots pad roots array with NaNs,
-            write(io, z)                  # ignore zero as a root.
-            counter += 1
-          end
-        end
-        results[k] = @spawn roots(poly)
-      end
-      first_run = false
-      w = 1
-    else
-      w += 1
-    end
-  end
-
-  @info "Saving last results..."
-
-  for k in 1:(w-1)
-    for z in roots(fetch(results[k]))
-      if !isnan(z) && abs(z) > eps(S) # PolynomialRoots pad roots array with NaNs,
-        write(io, z)                  # ignore zero as a root.
-        counter += 1
-      end
-    end
-  end
-
-  close(io)
-
-  @info "$counter roots found."
+  error("Not implemented yet.")
 end
