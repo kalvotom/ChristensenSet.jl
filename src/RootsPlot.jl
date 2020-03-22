@@ -58,7 +58,7 @@ end
 
 Show a graphical representation of the image `img`.
 """
-function plot(img::RootsImage{T}; mode=:sharp) where {T <: Real}
+function show(img::RootsImage{T}; mode=:sharp) where {T <: Real}
   if mode == :sharp
     output = (x -> min(1, x)).(img.data)
   elseif mode == :log_cutoff
@@ -76,7 +76,7 @@ end
     save_image(img, filename; mode)
 
 """
-function save_image(img::RootsImage{T}, filename::AbstractString; mode=:sharp, latex_filename=nothing) where {T <: Real}
+function save_image(img::RootsImage{T}, filename::AbstractString; mode=:log_cutoff, latex_filename=nothing) where {T <: Real}
   @info "Saving the image..."
 
   if mode == :sharp
@@ -97,10 +97,10 @@ end
 
 """
 
-    load_image(img, filename)
+    fill_image!(img, filename)
 
 """
-function load_image(img::RootsImage{T}, filename::AbstractString) where {T <: Real}
+function fill_image!(img::RootsImage{T}, filename::AbstractString) where {T <: Real}
   progress = Progress(div(filesize(filename), sizeof(Complex{T})) + 1, 10)
 
   @info "Sifting through data..."
@@ -120,7 +120,7 @@ end
     load_images(imgs, filename)
 
 """
-function load_images(imgs::Array{RootsImage{T}}, filename::AbstractString) where {T <: Real}
+function fill_images!(imgs::Array{RootsImage{T}}, filename::AbstractString) where {T <: Real}
   progress = Progress(div(filesize(filename), sizeof(Complex{T})) + 1, 10)
 
   @info "Sifting through data..."

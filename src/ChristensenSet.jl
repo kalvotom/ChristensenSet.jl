@@ -7,7 +7,8 @@
 
 
 """
-A Julia package aimed at exploring the [Christensen's set](http://math.ucr.edu/home/baez/roots/).
+A Julia package aimed at exploring the [Christensen's set](http://math.ucr.edu/home/baez/roots/)
+http://jdc.math.uwo.ca/roots/.
 """
 module ChristensenSet
 
@@ -17,8 +18,8 @@ using Distributed, ProgressMeter
 
 export PolynomialIterator
 export RootsImage
-export compute_roots!
-export save_image, load_image, plot
+export find_roots!
+export save_image, fill_image!, fill_images!, show
 
 include("PolynomialIterator.jl")
 include("RootsPlot.jl")
