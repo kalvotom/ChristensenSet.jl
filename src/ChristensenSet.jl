@@ -19,7 +19,7 @@ using Distributed, ProgressMeter
 export PolynomialIterator
 export RootsImage
 export find_roots!
-export save_image, fill_image!, fill_images!, show
+export save_image, fill_image!, fill_images!, plot
 
 include("PolynomialIterator.jl")
 include("RootsPlot.jl")

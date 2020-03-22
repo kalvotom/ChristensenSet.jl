@@ -58,7 +58,7 @@ end
 
 Show a graphical representation of the image `img`.
 """
-function show(img::RootsImage{T}; mode=:sharp) where {T <: Real}
+function plot(img::RootsImage{T}; mode=:sharp) where {T <: Real}
   if mode == :sharp
     output = (x -> min(1, x)).(img.data)
   elseif mode == :log_cutoff
