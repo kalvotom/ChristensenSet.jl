@@ -3,8 +3,13 @@
 # Visualization and related functions
 #
 
+
 """
-Essentially a two dimensional histogram. 
+
+    RootsImage(leftbottom, topright, width, height)
+
+Essentially a two dimensional histogram covering an rectangle in the
+complex plane specified by complex numbers `leftbottom` and `topright` with `width` horizontal and `height` vertical bins.
 """
 struct RootsImage{T <: Real}
   remin::T
@@ -26,6 +31,12 @@ struct RootsImage{T <: Real}
   end
 end
 
+"""
+
+    add_root!(img, z)
+
+Add a root `z` to image `img`.
+"""
 function add_root!(img::RootsImage{T}, z::Complex{T}) where {T <: Real}
   r = real(z); i = imag(z)
 
@@ -40,6 +51,13 @@ function add_root!(img::RootsImage{T}, z::Complex{T}) where {T <: Real}
   img.data[x, y] += T(1)
 end
 
+
+"""
+
+    plot(img; mode)
+
+Show a graphical representation of the image `img`.
+"""
 function plot(img::RootsImage{T}; mode=:sharp) where {T <: Real}
   if mode == :sharp
     output = (x -> min(1, x)).(img.data)
@@ -52,6 +70,12 @@ function plot(img::RootsImage{T}; mode=:sharp) where {T <: Real}
   return colorview(Gray, transpose(output)[end:-1:1,1:end])
 end
 
+
+"""
+
+    save_image(img, filename; mode)
+
+"""
 function save_image(img::RootsImage{T}, filename::AbstractString; mode=:sharp, latex_filename=nothing) where {T <: Real}
   @info "Saving the image..."
 
@@ -70,6 +94,12 @@ function save_image(img::RootsImage{T}, filename::AbstractString; mode=:sharp, l
   end
 end
 
+
+"""
+
+    load_image(img, filename)
+
+"""
 function load_image(img::RootsImage{T}, filename::AbstractString) where {T <: Real}
   progress = Progress(div(filesize(filename), sizeof(Complex{T})) + 1, 10)
 
@@ -84,6 +114,12 @@ function load_image(img::RootsImage{T}, filename::AbstractString) where {T <: Re
   end
 end
 
+
+"""
+
+    load_images(imgs, filename)
+
+"""
 function load_images(imgs::Array{RootsImage{T}}, filename::AbstractString) where {T <: Real}
   progress = Progress(div(filesize(filename), sizeof(Complex{T})) + 1, 10)
 
@@ -100,6 +136,12 @@ function load_images(imgs::Array{RootsImage{T}}, filename::AbstractString) where
   end
 end
 
+
+"""
+
+  write_latex(img, filename, latex_filename)
+
+"""
 function write_latex(img::RootsImage{T}, filename::AbstractString, latex_filename::AbstractString) where {T <: Real}
   open(latex_filename, "w") do io
     write(io, "\\documentclass{standalone}\n")
@@ -109,9 +151,9 @@ function write_latex(img::RootsImage{T}, filename::AbstractString, latex_filenam
     write(io, "\\usepackage{lmodern}\n")
     write(io, "\\begin{document}\n")
     write(io, "\\begin{tikzpicture}\n")
-    write(io, "  \\begin{axis}[enlarge limits=false, axis on top, xlabel={\$\\Re\$}, ylabel={\$\\Im\$}]\n")
-    write(io, "     \\addplot graphics [xmin=$(img.remin), xmax=$(img.remax), ymin=$(img.immin), ymax=$(img.immax)] {$filename};\n")
-    write(io, "  \\end{axis}\n")
+    write(io, "\\begin{axis}[enlarge limits=false, axis on top, xlabel={\$\\Re\$}, ylabel={\$\\Im\$}]\n")
+    write(io, "\\addplot graphics [xmin=$(img.remin), xmax=$(img.remax), ymin=$(img.immin), ymax=$(img.immax)] {$filename};\n")
+    write(io, "\\end{axis}\n")
     write(io, "\\end{tikzpicture}\n")
     write(io, "\\end{document}\n")
   end

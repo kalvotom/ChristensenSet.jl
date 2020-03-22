@@ -5,8 +5,9 @@
 # Tomáš Kalvoda, FIT CTU in Prague, 2018--2020
 #
 
+
 """
-http://math.ucr.edu/home/baez/roots/
+A Julia package aimed at exploring the [Christensen's set](http://math.ucr.edu/home/baez/roots/).
 """
 module ChristensenSet
 

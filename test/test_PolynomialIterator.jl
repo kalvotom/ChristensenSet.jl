@@ -36,3 +36,17 @@ end
 
   @test iterate(iterator, state) == nothing
 end
+
+@testset "Polynomial iterator: length" begin
+  iterator = PolynomialIterator([1, 2, 3], 0)
+
+  @test length(iterator) == 3
+
+  iterator = PolynomialIterator([1, 2], 1)
+
+  @test length(iterator) == 4
+
+  iterator = PolynomialIterator([1, 2, 3], 2)
+
+  @test length(iterator) == 27
+end
