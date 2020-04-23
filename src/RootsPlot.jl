@@ -8,7 +8,7 @@
 
     RootsImage(leftbottom, topright, width, height)
 
-Essentially a two dimensional histogram covering an rectangle in the
+Essentially a two dimensional histogram covering a rectangle in the
 complex plane specified by complex numbers `leftbottom` and `topright` with `width` horizontal and `height` vertical bins.
 """
 struct RootsImage{T <: Real}
@@ -97,27 +97,7 @@ end
 
 """
 
-    fill_image!(img, filename)
-
-"""
-function fill_image!(img::RootsImage{T}, filename::AbstractString) where {T <: Real}
-  progress = Progress(div(filesize(filename), sizeof(Complex{T})) + 1, 10)
-
-  @info "Sifting through data..."
-
-  open(filename) do io
-    while !eof(io)
-      z = read(io, Complex{T})
-      add_root!(img, z)
-      next!(progress)
-    end
-  end
-end
-
-
-"""
-
-    load_images(imgs, filename)
+    fill_images!(imgs, filename)
 
 """
 function fill_images!(imgs::Array{RootsImage{T}}, filename::AbstractString) where {T <: Real}
@@ -136,6 +116,15 @@ function fill_images!(imgs::Array{RootsImage{T}}, filename::AbstractString) wher
   end
 end
 
+
+"""
+
+    fill_image!(img, filename)
+
+"""
+function fill_image!(img::RootsImage{T}, filename::AbstractString) where {T <: Real}
+  fill_images!([img], filename)
+end
 
 """
 
