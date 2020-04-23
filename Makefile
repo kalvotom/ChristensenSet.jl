@@ -4,7 +4,7 @@
 #
 
 tests:
-	julia --project=@. test/runtests.jl
+	julia --color=yes --project=@. test/runtests.jl
 
 documentation:
-	julia --project=@. docs/make.jl
+	julia --color=yes --project=@. docs/make.jl
