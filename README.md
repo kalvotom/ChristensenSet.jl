@@ -18,7 +18,7 @@ It is a subset of the complex plane and it is easy to visualize its density.
 
 The following picture shows all roots of polynomials with coefficients 1 or -1 and degree at most 25.
 
-![alt text](https://github.com/kalvotom/ChristenSet.jl/blob/master/gallery/ones.png?raw=true "Roots of polynomials with coefficients 1 or -1 and degree at most 25.")
+![alt text](https://github.com/kalvotom/ChristensenSet.jl/blob/master/gallery/ones.png?raw=true "Roots of polynomials with coefficients 1 or -1 and degree at most 25.")
 
 This Julia package is motivated by the [John Baez's article](http://math.ucr.edu/home/baez/roots/) and [Dan Christensen's experiments](http://jdc.math.uwo.ca/roots/).
 It employs the [PolynomialRoots.jl](https://github.com/giordano/PolynomialRoots.jl) package for root finding.
