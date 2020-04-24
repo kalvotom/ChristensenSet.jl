@@ -59,14 +59,23 @@ end
 Show a graphical representation of the image `img`.
 """
 function plot(img::RootsImage{T}; mode=:sharp) where {T <: Real}
-  if mode == :sharp
+  if isa(mode, Function)
+    output = mode.(img.data)
+  elseif mode == :sharp
     output = (x -> min(1, x)).(img.data)
   elseif mode == :log_cutoff
-    mean = sum(img.data) / length(img.data)
-    output = (x -> log(1 + min(1.2 * mean, x))).(img.data)
-    output = output / maximum(output)
+    m      = mean(img.data)
+    output = (x -> log(1 + min(2m, x))).(img.data)
+  elseif mode == :log
+    output = (x -> log(1 + x)).(img.data)
+  elseif mode == :linear
+    output = img.data
+  else
+    error("Unknown mode!")
   end
-  
+
+  output = output / maximum(output)
+
   return colorview(Gray, transpose(output)[end:-1:1,1:end])
 end
 
@@ -79,13 +88,23 @@ end
 function save_image(img::RootsImage{T}, filename::AbstractString; mode=:log_cutoff, latex_filename=nothing) where {T <: Real}
   @info "Saving the image..."
 
-  if mode == :sharp
+  if isa(mode, Function)
+    output = mode.(img.data)
+  elseif mode == :sharp
     output = (x -> min(1, x)).(img.data)
   elseif mode == :log_cutoff
-    mean = sum(img.data) / length(img.data)
-    output = (x -> log(1 + min(1.2 * mean, x))).(img.data)
-    output = output / maximum(output)
+    m      = mean(img.data)
+    output = (x -> log(1 + min(2m, x))).(img.data)
+  elseif mode == :log
+    output = (x -> log(1 + x)).(img.data)
+  elseif mode == :linear
+    output = img.data
+  else
+    error("Unknown mode!")
   end
+
+  output = output / maximum(output)
+
   Images.save(filename, colorview(Gray, transpose(output)[end:-1:1,1:end]))
 
   if latex_filename != nothing
@@ -140,7 +159,7 @@ function write_latex(img::RootsImage{T}, filename::AbstractString, latex_filenam
     write(io, "\\usepackage{lmodern}\n")
     write(io, "\\begin{document}\n")
     write(io, "\\begin{tikzpicture}\n")
-    write(io, "\\begin{axis}[enlarge limits=false, axis on top, xlabel={\$\\Re\$}, ylabel={\$\\Im\$}]\n")
+    write(io, "\\begin{axis}[enlargelimits=false, axis on top, xlabel={\$\\Re\$}, ylabel={\$\\Im\$}]\n")
     write(io, "\\addplot graphics [xmin=$(img.remin), xmax=$(img.remax), ymin=$(img.immin), ymax=$(img.immax)] {$filename};\n")
     write(io, "\\end{axis}\n")
     write(io, "\\end{tikzpicture}\n")

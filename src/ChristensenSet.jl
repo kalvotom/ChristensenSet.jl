@@ -7,12 +7,11 @@
 
 
 """
-A Julia package aimed at exploring the [Christensen's set](http://math.ucr.edu/home/baez/roots/)
-http://jdc.math.uwo.ca/roots/.
+A Julia package aimed at exploring the [Christensen set](http://math.ucr.edu/home/baez/roots/) discovered by [Dan Christensen](http://jdc.math.uwo.ca/roots/).
 """
 module ChristensenSet
 
-using PolynomialRoots
+using PolynomialRoots, Statistics
 using Images, FileIO
 using Distributed, ProgressMeter
 
