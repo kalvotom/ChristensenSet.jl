@@ -6,7 +6,7 @@
 ```@contents
 ```
 
-## What is a Christensen set?
+## What is Christensen's set?
 
 Let us consider a finite set of complex numbers ``K`` and a positive integer ``n``.
 Then the Christensen set ``C_{K, n}`` is the set of all roots of univariate polynomials with coefficients from ``K`` and degree at most ``n``.
