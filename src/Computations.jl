@@ -20,7 +20,7 @@ function find_roots!(poly_iter::PolynomialIterator{S}, image::RootsImage{T}) whe
 
   for poly in poly_iter
     for z in roots(poly)
-      if abs(z) > eps(S) # ignore zero as a root.
+      if abs(z) > eps(T) # ignore zero as a root.
         add_root!(image, z)
       end
     end
@@ -49,7 +49,7 @@ function find_roots!(poly_iter::PolynomialIterator{S}, filename::AbstractString)
   open(filename, "w") do io
     for poly in poly_iter
       for z in roots(poly)
-        if abs(z) > eps(S) # ignore zero as a root.
+        if abs(z) > eps(T) # ignore zero as a root.
           write(io, z)                  
           counter += 1
         end
