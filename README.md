@@ -16,7 +16,7 @@ Let us consider a finite set of complex numbers `K` and a positive integer `n`.
 Then the Christensen set `C(K, n)` is the set of all roots of univariate polynomials with coefficients from `K` and degree at most `n`.
 It is a subset of the complex plane and it is easy to visualize its density.
 
-The following picture shows all roots of polynomials with coefficients 1 or -1 and degree at most 25.
+The following picture shows all roots of polynomials with coefficients 1 or -1 and degree at most 25 (there are 3 221 224 897 of them).
 Further images can be found in the [Gallery](https://kam.fit.cvut.cz/deploy/christensen/).
 
 ![alt text](https://github.com/kalvotom/ChristensenSet.jl/blob/master/gallery/ones.png?raw=true "Roots of polynomials with coefficients 1 or -1 and degree at most 25.")
