@@ -15,6 +15,9 @@ It is a subset of the complex plane and it is easy to visualize its density.
 This Julia package is motivated by the [John Baez's article](http://math.ucr.edu/home/baez/roots/) and [Dan Christensen's experiments](http://jdc.math.uwo.ca/roots/).
 It employs the [PolynomialRoots.jl](https://github.com/giordano/PolynomialRoots.jl) package for root finding.
 
+A few beautiful fractal images can be found in the [Gallery](https://kam.fit.cvut.cz/deploy/christensen/).
+ 
+
 ## Polynomial iterator
 
 ```@docs
@@ -39,6 +42,7 @@ find_roots!
 save_image
 fill_image!
 fill_images!
+animate_growth
 plot
 ```
 

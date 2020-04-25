@@ -1,2 +1,11 @@
 *.dat
+*.log
+*.aux
+*.tex
+*.pdf
+*.png
 docs/build
+gallery/build
+gallery/animation
+gallery/src/assets
+.ipynb_checkpoints

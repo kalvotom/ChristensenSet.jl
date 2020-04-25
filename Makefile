@@ -9,10 +9,15 @@ tests:
 documentation:
 	julia --color=yes --project=@. docs/make.jl
 
+web_gallery:
+	mkdir -p gallery/src/assets
+	cp gallery/*png gallery/src/assets
+	julia --color=yes --project=@. gallery/make.jl
+
 computation: gallery/ones_Float64.dat gallery/ex13_Float64.dat gallery/ex1i_Float64.dat
 
 gallery/ones_Float64.dat:
-	julia --color=yes --project=@. -r 'cd("gallery"); include("generate_one.jl")'
+	julia --color=yes --project=@. -e 'cd("gallery"); include("generate_one.jl")'
 
 gallery/ex13_Float64.dat:
 	julia --color=yes --project=@. -e 'cd("gallery"); include("generate_13.jl")'
