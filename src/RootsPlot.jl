@@ -184,6 +184,17 @@ function animate_growth(poly_iter::PolynomialIterator{S}, img::RootsImage{T}, fi
   end 
 end
 
+function animate_deformation(coefficients, output_filename, steps)
+  progress = Progress(steps)
+  for step in 0:steps
+    polynomials = PolynomialIterator(coefficients(step), 18)
+    image = RootsImage(-2.0-2.0im, 2.0+2.0im, 1000, 1000)
+    find_roots!(polynomials, image)
+    save_image(image, output_filename(step))
+    next!(progress)
+  end
+end
+
 
 """
 
